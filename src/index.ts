@@ -1,37 +1,5 @@
 import yargs from 'yargs'
-import express from 'express'
-import detect from 'detect-port'
-import serveIndex from 'serve-index'
-
-interface Argv {
-  _: string[]
-  dir: string
-  port?: number
-  open?: boolean
-}
-
-async function serve(argv: Argv): Promise<any> {
-  function listen(port: number) {
-    return new Promise((resolve, reject) => {
-      try {
-        app.listen(port, () => {
-          resolve()
-        })
-      } catch (e) {
-        reject(e)
-        console.log(e)
-      }
-    })
-  }
-  const app = express()
-  const root = argv.dir
-
-  app.use(express.static(root), serveIndex(root, { icons: true, hidden: true }))
-
-  const port = await detect(argv.port || 8080)
-  await listen(port)
-  console.log(port)
-}
+import serve, { IOptions } from './serve'
 
 yargs
   .strict(true)
@@ -46,11 +14,11 @@ yargs
     if (err) console.error(msg)
     process.exit(1)
   })
-  .command(
+  .command<IOptions>(
     '$0 [dir]',
     '启动静态文件服务器',
-    (yargs: yargs.Argv): void => {
-      yargs
+    yargs => {
+      return yargs
         .positional('dir', {
           type: 'string',
           default: '.',
@@ -63,6 +31,13 @@ yargs
           requiresArg: true,
           describe: '设置服务器端口号'
         })
+        .option('base', {
+          alias: 'b',
+          type: 'string',
+          default: '/',
+          requiresArg: true,
+          describe: '基础路由地址'
+        })
         .option('open', {
           alias: 'o',
           type: 'boolean',
@@ -70,8 +45,6 @@ yargs
           describe: '是否自动打开浏览器'
         })
     },
-    (argv: yargs.Arguments<Argv>) => {
-      console.log('dsds', argv)
-    }
+    argv => serve(argv)
   )
   .parse(process.argv.slice(2))
