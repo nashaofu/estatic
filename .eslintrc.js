@@ -8,6 +8,6 @@ module.exports = {
   },
   extends: ['standard', 'plugin:@typescript-eslint/recommended'],
   rules: {
-    '@typescript-eslint/indent': ['error', 2]
+    '@typescript-eslint/indent': 'off'
   }
 }

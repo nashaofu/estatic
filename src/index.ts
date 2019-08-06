@@ -1,5 +1,5 @@
 import yargs from 'yargs'
-import serve, { IOptions } from './serve'
+import serve, { Options, Argv } from './serve'
 
 yargs
   .strict(true)
@@ -8,16 +8,18 @@ yargs
   .alias('help', 'h')
   .alias('version', 'v')
   .wrap(null)
-  .fail((msg: string, err: Error) => {
-    yargs.showHelp()
-    console.log()
-    if (err) console.error(msg)
-    process.exit(1)
-  })
-  .command<IOptions>(
+  .fail(
+    (msg: string, err: Error): void => {
+      yargs.showHelp()
+      console.log()
+      if (err) console.error(msg)
+      process.exit(1)
+    }
+  )
+  .command<Options>(
     '$0 [dir]',
     '启动静态文件服务器',
-    yargs => {
+    (yargs: yargs.Argv): yargs.Argv<Options> => {
       return yargs
         .positional('dir', {
           type: 'string',
@@ -45,6 +47,6 @@ yargs
           describe: '是否自动打开浏览器'
         })
     },
-    argv => serve(argv)
+    (argv: yargs.Arguments<Argv>): Promise<void> => serve(argv)
   )
   .parse(process.argv.slice(2))
