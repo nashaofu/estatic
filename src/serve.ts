@@ -1,4 +1,5 @@
 import os from 'os'
+import open from 'open'
 import chalk from 'chalk'
 import express from 'express'
 import detect from 'detect-port'
@@ -22,14 +23,14 @@ function getIPv4URL (port: number, base: string): string[] {
 }
 
 export interface Options {
-  dir: string;
-  port: number;
-  base: string;
-  open: boolean;
+  dir: string
+  port: number
+  base: string
+  open: boolean
 }
 
 export interface Argv extends Options {
-  _: string[];
+  _: string[]
 }
 
 export default async (argv: Argv): Promise<void> => {
@@ -48,6 +49,7 @@ export default async (argv: Argv): Promise<void> => {
       console.log(`\n${chalk.bgBlue.black('', 'I', '')} 服务器运行在: ${url}\n`)
       console.log(`${chalk.bgWhite.black('', 'N', '')} 你也可以通过下面的地址访问:`)
       console.log(`\n${ipv4}\n`)
+      if (argv.open) open(url)
     }
   )
 }
