@@ -8,14 +8,12 @@ yargs
   .alias('help', 'h')
   .alias('version', 'v')
   .wrap(null)
-  .fail(
-    (msg: string, err: Error): void => {
-      yargs.showHelp()
-      console.log()
-      if (err) console.error(msg)
-      process.exit(1)
-    }
-  )
+  .fail((msg: string, err: Error): void => {
+    yargs.showHelp()
+    console.log()
+    if (err) console.error(msg)
+    process.exit(1)
+  })
   .command<Options>(
     '$0 [dir]',
     '启动静态文件服务器',
