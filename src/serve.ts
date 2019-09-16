@@ -36,7 +36,11 @@ export default async (argv: Argv): Promise<void> => {
   const port = await detect(argv.port || 8080)
   const base = argv.base.replace(/^\/+|\/+$/g, '')
 
-  app.use(`/${base}`, express.static(argv.dir), serveIndex(argv.dir, { icons: true, hidden: true }))
+  app.use(
+    `/${base}`,
+    express.static(argv.dir, { dotfiles: 'allow' }),
+    serveIndex(argv.dir, { icons: true, hidden: true })
+  )
 
   app.listen(port, (): void => {
     const url = `http://localhost:${port}/${base}`
