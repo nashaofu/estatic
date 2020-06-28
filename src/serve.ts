@@ -1,6 +1,7 @@
 import os from 'os'
 import open from 'open'
 import chalk from 'chalk'
+import QRCode from 'qrcode'
 import express from 'express'
 import detect from 'detect-port'
 import serveIndex from 'serve-index'
@@ -8,15 +9,15 @@ import serveIndex from 'serve-index'
 /**
  * 获取局域网ip
  */
-function getIPv4URL (port: number, base: string): string[] {
-  const ifaces = os.networkInterfaces()
-  return Object.keys(ifaces).reduce((ips: string[], key): string[] => {
-    ifaces[key].forEach((iface: os.NetworkInterfaceInfo): void => {
-      if (iface.family === 'IPv4') {
-        ips.push(`    http://${iface.address}:${port}/${base}`)
+function getIPv4urls (port: number, base: string): string[] {
+  const ifaces = Object.values(os.networkInterfaces())
+  return ifaces.reduce((ipv4Urls: string[], value = []): string[] => {
+    value.forEach((iface: os.NetworkInterfaceInfo): void => {
+      if (iface.family === 'IPv4' && iface.address !== '127.0.0.1') {
+        ipv4Urls.push(`http://${iface.address}:${port}/${base}`)
       }
     })
-    return ips
+    return ipv4Urls
   }, [])
 }
 
@@ -43,12 +44,29 @@ export default async (argv: Argv): Promise<void> => {
   )
 
   app.listen(port, (): void => {
-    const url = `http://localhost:${port}/${base}`
-    const ipv4 = getIPv4URL(port, base).join('\n')
+    const url = `http://127.0.0.1:${port}/${base}`
+    const ipv4Urls = getIPv4urls(port, base)
 
-    console.log(`\n${chalk.bgBlue.black('', 'I', '')} 服务器运行在: ${url}\n`)
-    console.log(`${chalk.bgWhite.black('', 'N', '')} 你也可以通过下面的地址访问:`)
-    console.log(`\n${ipv4}\n`)
+    console.log(`\n${chalk.bgBlue.black('', 'I', '')} Server running on: ${url}\n`)
+    console.log(`${chalk.bgWhite.black('', 'N', '')} You can also visit it by:`)
+    console.log(`\n${ipv4Urls.map(url => `    ${url}`).join('\n')}\n`)
+
+    QRCode.toString(ipv4Urls[0] || '', {
+      type: 'utf8',
+      margin: 0
+    })
+      .then(code => {
+        console.log(
+          code
+            .split('\n')
+            .map(line => `    ${line}`)
+            .join('\n')
+        )
+      })
+      .catch(() => {
+        console.error('Failed to generate QR code')
+      })
+
     if (argv.open) open(url)
   })
 }

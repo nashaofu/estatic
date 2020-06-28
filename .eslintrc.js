@@ -8,9 +8,8 @@ module.exports = {
   },
   extends: ['standard', 'plugin:@typescript-eslint/recommended'],
   rules: {
-    '@typescript-eslint/indent': 'off',
     '@typescript-eslint/member-delimiter-style': [
-      'error',
+      2,
       {
         multiline: {
           delimiter: 'none',

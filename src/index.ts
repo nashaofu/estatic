@@ -7,6 +7,7 @@ yargs
   .usage('$0 [dir]')
   .alias('help', 'h')
   .alias('version', 'v')
+  .locale('en')
   .wrap(null)
   .fail((msg: string, err: Error): void => {
     yargs.showHelp()
@@ -16,33 +17,33 @@ yargs
   })
   .command<Options>(
     '$0 [dir]',
-    '启动静态文件服务器',
+    'Start a static server',
     (yargs: yargs.Argv): yargs.Argv<Options> => {
       return yargs
         .positional('dir', {
           type: 'string',
           default: '.',
-          describe: '静态文件夹目录'
+          describe: 'Static folder directory'
         })
         .option('port', {
           alias: 'p',
           type: 'number',
           default: 8080,
           requiresArg: true,
-          describe: '设置服务器端口号'
+          describe: 'Server port number'
         })
         .option('base', {
           alias: 'b',
           type: 'string',
           default: '/',
           requiresArg: true,
-          describe: '基础路由地址'
+          describe: 'Basic routing address'
         })
         .option('open', {
           alias: 'o',
           type: 'boolean',
           default: false,
-          describe: '是否自动打开浏览器'
+          describe: 'Open browser automatically'
         })
     },
     (argv: yargs.Arguments<Argv>): Promise<void> => serve(argv)
