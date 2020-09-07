@@ -1,7 +1,6 @@
 import os from 'os'
 import open from 'open'
 import chalk from 'chalk'
-import QRCode from 'qrcode'
 import express from 'express'
 import detect from 'detect-port'
 import serveIndex from 'serve-index'
@@ -50,22 +49,6 @@ export default async (argv: Argv): Promise<void> => {
     console.log(`\n${chalk.bgBlue.black('', 'I', '')} Server running on: ${url}\n`)
     console.log(`${chalk.bgWhite.black('', 'N', '')} You can also visit it by:`)
     console.log(`\n${ipv4Urls.map(url => `    ${url}`).join('\n')}\n`)
-
-    QRCode.toString(ipv4Urls[0] || '', {
-      type: 'utf8',
-      margin: 0
-    })
-      .then(code => {
-        console.log(
-          code
-            .split('\n')
-            .map(line => `    ${line}`)
-            .join('\n')
-        )
-      })
-      .catch(() => {
-        console.error('Failed to generate QR code')
-      })
 
     if (argv.open) open(url)
   })
