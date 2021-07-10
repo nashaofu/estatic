@@ -1,5 +1,5 @@
 import yargs from 'yargs'
-import serve, { Options, Argv } from './serve'
+import serve, { Options } from './serve'
 
 yargs
   .strict(true)
@@ -46,6 +46,6 @@ yargs
           describe: 'Open browser automatically'
         })
     },
-    (argv: yargs.Arguments<Argv>): Promise<void> => serve(argv)
+    (argv: yargs.Arguments<Options>): Promise<void> => serve(argv)
   )
   .parse(process.argv.slice(2))

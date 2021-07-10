@@ -1,9 +1,12 @@
 import os from 'os'
+import Koa from 'koa'
 import open from 'open'
 import chalk from 'chalk'
-import express from 'express'
+import yargs from 'yargs'
 import detect from 'detect-port'
-import serveIndex from 'serve-index'
+import koaMount from 'koa-mount'
+import koaIndex from 'koa-index'
+import koaStatic from 'koa-static'
 
 /**
  * 获取局域网ip
@@ -27,19 +30,28 @@ export interface Options {
   open: boolean
 }
 
-export interface Argv extends Options {
-  _: string[]
-}
-
-export default async (argv: Argv): Promise<void> => {
-  const app = express()
+export default async (argv: yargs.Arguments<Options>): Promise<void> => {
+  const app = new Koa()
   const port = await detect(argv.port || 8080)
   const base = argv.base.replace(/^\/+|\/+$/g, '')
 
   app.use(
-    `/${base}`,
-    express.static(argv.dir, { dotfiles: 'allow' }),
-    serveIndex(argv.dir, { icons: true, hidden: true })
+    koaMount(
+      `/${base}`,
+      koaStatic(argv.dir, {
+        hidden: true
+      })
+    )
+  )
+
+  app.use(
+    koaMount(
+      `/${base}`,
+      koaIndex(argv.dir, {
+        hidden: true,
+        icons: true
+      })
+    )
   )
 
   app.listen(port, (): void => {
