@@ -1396,10 +1396,10 @@ koa-convert@^1.2.0:
     co "^4.6.0"
     koa-compose "^3.0.0"
 
-koa-index@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.nlark.com/koa-index/download/koa-index-0.0.4.tgz?cache=0&sync_timestamp=1625983750666&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fkoa-index%2Fdownload%2Fkoa-index-0.0.4.tgz#0c4f7e683fb1ccc7208182d8c19505c0ed60ea7d"
-  integrity sha1-DE9+aD+xzMcggYLYwZUFwO1g6n0=
+koa-index@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.nlark.com/koa-index/download/koa-index-0.0.5.tgz?cache=0&sync_timestamp=1625997944409&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fkoa-index%2Fdownload%2Fkoa-index-0.0.5.tgz#ca7c7b4027c1eab9d11e5fe4607e6acc65c61766"
+  integrity sha1-ynx7QCfB6rnRHl/kYH5qzGXGF2Y=
   dependencies:
     ejs "^3.1.6"
     fs-extra "^10.0.0"
