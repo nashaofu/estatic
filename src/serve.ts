@@ -48,8 +48,7 @@ export default async (argv: yargs.Arguments<Options>): Promise<void> => {
     koaMount(
       `/${base}`,
       koaIndex(argv.dir, {
-        hidden: true,
-        icons: true
+        hidden: true
       })
     )
   )
