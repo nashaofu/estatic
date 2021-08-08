@@ -4,6 +4,7 @@ import open from 'open'
 import chalk from 'chalk'
 import yargs from 'yargs'
 import detect from 'detect-port'
+import koaRange from 'koa-range'
 import koaMount from 'koa-mount'
 import koaIndex from 'koa-index'
 import koaStatic from 'koa-static'
@@ -34,6 +35,8 @@ export default async (argv: yargs.Arguments<Options>): Promise<void> => {
   const app = new Koa()
   const port = await detect(argv.port || 8080)
   const base = argv.base.replace(/^\/+|\/+$/g, '')
+
+  app.use(koaRange)
 
   app.use(
     koaMount(
