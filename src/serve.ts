@@ -9,7 +9,7 @@ import serveIndex from 'serve-index'
 /**
  * 获取局域网ip
  */
-function getIPv4urls(port: number, base: string): string[] {
+function getIPv4urls (port: number, base: string): string[] {
   const ifaces = Object.values(os.networkInterfaces())
   return ifaces.reduce((ipv4Urls: string[], value = []): string[] => {
     value.forEach((iface: os.NetworkInterfaceInfo): void => {
