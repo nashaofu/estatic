@@ -1,6 +1,6 @@
 # estatic
 
-A koa static file server
+A express static file server
 
 ## usage
 

@@ -1,16 +1,15 @@
 import os from 'os'
-import Koa from 'koa'
 import open from 'open'
-import chalk from 'chalk'
 import yargs from 'yargs'
+import chalk from 'chalk'
+import express from 'express'
 import detect from 'detect-port'
-import koaMount from 'koa-mount'
-import koaIndex from 'koa-index'
+import serveIndex from 'serve-index'
 
 /**
  * 获取局域网ip
  */
-function getIPv4urls (port: number, base: string): string[] {
+function getIPv4urls(port: number, base: string): string[] {
   const ifaces = Object.values(os.networkInterfaces())
   return ifaces.reduce((ipv4Urls: string[], value = []): string[] => {
     value.forEach((iface: os.NetworkInterfaceInfo): void => {
@@ -30,22 +29,14 @@ export interface Options {
 }
 
 export default async (argv: yargs.Arguments<Options>): Promise<void> => {
-  const app = new Koa()
+  const app = express()
   const port = await detect(argv.port || 8080)
   const base = argv.base.replace(/^\/+|\/+$/g, '')
 
   app.use(
-    koaMount(
-      `/${base}`,
-      koaIndex(argv.dir, {
-        index: 'index.html',
-        directory: true,
-        maxAge: 0,
-        lastModified: true,
-        etag: true,
-        hidden: true
-      })
-    )
+    `/${base}`,
+    express.static(argv.dir, { dotfiles: 'allow' }),
+    serveIndex(argv.dir, { icons: true, hidden: true })
   )
 
   app.listen(port, (): void => {
