@@ -45,6 +45,12 @@ yargs
           default: false,
           describe: 'Open browser automatically'
         })
+        .option('cors', {
+          alias: 'c',
+          type: 'string',
+          requiresArg: true,
+          describe: 'CORS access control allow origin'
+        })
     },
     (argv: yargs.Arguments<Options>): Promise<void> => serve(argv)
   )
