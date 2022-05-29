@@ -1,6 +1,6 @@
 {
   "name": "estatic",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "A express static file server",
   "bin": {
     "estatic": "estatic.js"
@@ -14,7 +14,7 @@
     "dev": "tsc --watch",
     "build": "npm run lint && npm run clean && tsc",
     "lint": "eslint . --ext .js,.ts --fix",
-    "clean": "rimraf lib",
+    "clean": "rimraf dist",
     "prepare": "husky install"
   },
   "keywords": [
