@@ -1,6 +1,6 @@
 # estatic
 
-A express static file server
+A express static file server for CLI
 
 ## usage
 
