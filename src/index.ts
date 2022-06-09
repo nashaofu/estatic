@@ -50,11 +50,29 @@ yargs
           default: false,
           describe: 'Open browser automatically',
         })
+        .option('silent', {
+          alias: 's',
+          type: 'boolean',
+          default: false,
+          describe: 'Suppress log messages from output',
+        })
         .option('cors', {
           alias: 'c',
           type: 'string',
           requiresArg: true,
-          describe: 'CORS access control allow origin',
+          describe: 'Enable CORS via the "Access-Control-Allow-Origin" header',
+        })
+        .option('username', {
+          type: 'string',
+          requiresArg: true,
+          describe: 'Username for basic authentication',
+          implies: ['password'],
+        })
+        .option('password', {
+          type: 'string',
+          requiresArg: true,
+          describe: 'Password for basic authentication',
+          implies: ['username'],
         }),
     (argv: yargs.Arguments<Options>): Promise<void> => serve(argv),
   )

@@ -2,6 +2,7 @@ import colors from 'colors';
 import cors from 'cors';
 import detect from 'detect-port';
 import express, { NextFunction, Request, Response } from 'express';
+import basicAuth from 'express-basic-auth';
 import morgan from 'morgan';
 import open from 'open';
 import os from 'os';
@@ -32,7 +33,10 @@ export interface Options {
   port: number
   base: string
   open: boolean
+  silent: boolean
   cors?: string
+  username?: string
+  password?: string
 }
 
 export default async (argv: yargs.Arguments<Options>): Promise<void> => {
@@ -40,7 +44,18 @@ export default async (argv: yargs.Arguments<Options>): Promise<void> => {
   const port = await detect(argv.port || 8080);
   const base = `/${argv.base.replace(/^\/+|\/+$/g, '')}`;
 
-  app.use(morgan('combined'));
+  if (!argv.silent) {
+    app.use(morgan('combined'));
+  }
+
+  if (argv.username && argv.password) {
+    app.use(
+      basicAuth({
+        users: { [argv.username]: argv.password },
+        challenge: true,
+      }),
+    );
+  }
 
   app.use(
     base,
